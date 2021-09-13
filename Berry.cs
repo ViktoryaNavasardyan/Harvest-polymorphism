@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +8,7 @@ namespace Dynamic_Polymorphism.Model
 {
     class Berry : Harvest
     {
-        string _name;
-        string Taste
-        {
-            get => _taste;
-            set => _taste = value;
-        }
-        public Berry(double weight, string name, string taste) : base(weight)
-        {
-            _name = name;
-            Taste = taste;
-        }
+        public Berry(string name, double weight, string metric, string taste) : base(name, weight, metric, taste){ }
         public override void ToRipe()
         {
             _weight += 1.5 * _weight + 1;
@@ -28,6 +18,10 @@ namespace Dynamic_Polymorphism.Model
         {
             Console.WriteLine("On the bush");
         }
-
+        public override void Show()
+        {
+            Console.Write($"Berry name = {_name},  weight = {_weight} {_metric},  taste = {_taste}, I am growing ");
+            Place();
+        }
     }
 }
