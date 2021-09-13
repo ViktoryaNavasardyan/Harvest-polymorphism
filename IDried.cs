@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Dynamic_Polymorphism.Model
 {
-    interface IDried
+    interface IDry
     {
-        void Dried();
-        void ChangeName(string newName);
+        void Dry();
     }
 }
