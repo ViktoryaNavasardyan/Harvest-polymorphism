@@ -6,22 +6,35 @@ using System.Threading.Tasks;
 
 namespace Dynamic_Polymorphism.Model
 {
-    abstract class Harvest
+    abstract class Harvest: IMarinate, IDry
     {
         protected string _name;
         protected double _weight;
-        protected string _metric;
-        protected string _taste; //qaxcr, ttu, dary
-        public Harvest (string name, double w, string m, string taste)
+        protected Metric _metric;
+        protected Taste _taste;
+        protected State _state;
+        public Harvest (string name, double weight, Metric metric, Taste taste = Taste.unknown, State state = State.unknown)
         {
-            _name = name;
-            _weight = w;
-            _metric = m;
-            _taste = taste;
+            if (weight >= 0
+                && (metric == Metric.g || metric == Metric.kg || metric == Metric.t)
+                && (taste == Taste.acrid || taste == Taste.salty || taste == Taste.sour || taste == Taste.sweet || taste == Taste.unknown)
+                && (state == State.unknown || state == State.dried || state == State.growing || state == State.marinated || state == State.riped))
+            {
+                _name = name;
+                _weight = weight;
+                _metric = metric;
+                CheckMetric();
+                _taste = taste;
+                _state = state;
+            }
+            else
+            {
+                throw new InvalidParameterException();
+            }
         }
-        private void HelpFunction(string currentMetric, string resultMetric)
+        private void AdjustMetric(Metric currentMetric, Metric resultMetric)
         {
-            if (_metric.Equals(currentMetric))
+            if (_metric == currentMetric)
             {
                 if (_weight >= 1000)
                 {
@@ -30,17 +43,51 @@ namespace Dynamic_Polymorphism.Model
                 }
             }
         }
-        public virtual void CheckMetric()
+        private void CheckMetric()
         {
-            HelpFunction("g", "kg");
-            HelpFunction("kg", "t");
+            AdjustMetric(Metric.g, Metric.kg);
+            AdjustMetric(Metric.kg , Metric.t);
         }
-        public abstract void ToRipe();
-        public abstract void Place();
-        public virtual void  Show()
+        public virtual void Ripe() => _state = State.riped;
+        public abstract void Location();
+        public virtual void Show()
         {
-            Console.Write($"Harvest = {_name},  weight = {_weight} {_metric},  taste = {_taste}, I am growing ");
-            Place();
+            Console.Write($"Harvest = {_name},  weight = {_weight} {_metric}, state = {_state},  taste = {_taste}, I am growing ");
+            Location();
         }
+        public virtual void Marinate()
+        {
+            _taste = Taste.sour;
+            _state = State.marinated;
+        }
+        public virtual void Dry()
+        {
+            _weight = _weight / 2;
+            _state = State.dried;
+
+        }
+    }
+    enum Metric
+    {
+        g,
+        kg,
+        t,
+        piece
+    }
+    enum Taste
+    {
+        unknown,
+        sweet,
+        sour,
+        acrid,
+        salty
+    }
+    enum State
+    {
+        unknown,
+        growing,
+        riped,
+        dried,
+        marinated
     }
 }
