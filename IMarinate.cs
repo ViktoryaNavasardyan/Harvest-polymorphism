@@ -9,7 +9,5 @@ namespace Dynamic_Polymorphism.Model
     interface IMarinate
     {
         void Marinate();
-        void ChangeName(string newName);
-
     }
 }
