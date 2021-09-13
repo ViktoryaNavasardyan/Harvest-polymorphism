@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,19 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dynamic_Polymorphism.Model
 {
-    class Vegetable : Harvest
+    class Vegetable : Harvest, IMarinate
     {
-        string _name;
-        string Taste
-        {
-            get => _taste;
-            set => _taste = value;
-        }
-        public Vegetable(double weight, string name, string taste) : base(weight)
-        {
-            _name = name;
-            Taste = taste;
-        }
+        public Vegetable(string name, double weight, string metric, string taste) : base(name, weight, metric, taste) { }
+
+        public Vegetable(string name, double weight, string metric) : base(name, weight, metric, null) { }
         public override void ToRipe()
         {
             _weight += 2 * _weight + 5;
@@ -28,6 +20,19 @@ namespace Dynamic_Polymorphism.Model
         {
             Console.WriteLine("In the ground.");
         }
-
+        public void Marinate()
+        {
+            _taste = "sour";
+        }
+        public void ChangeName(string newName)
+        {
+            _name = newName;
+        }
+        public override void Show()
+        {
+            Console.Write($"Vegetable name = {_name},  weight = {_weight} {_metric},  taste = {_taste}, I am growing ");
+            Place();
+        }
+        
     }
 }
